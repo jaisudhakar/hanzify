@@ -14,17 +14,62 @@
         "type": "color_scheme_group",
         "id": "color_schemes",
         "definition": [
-          { "type": "color", "id": "background", "label": "Background", "default": "#FFFFFF" },
-          { "type": "color", "id": "background_alt", "label": "Secondary background", "default": "#F5F5F5", "info": "Used for the try-on stage and soft panels." },
-          { "type": "color", "id": "card", "label": "Product card background", "default": "#F4F4F4" },
-          { "type": "color", "id": "text", "label": "Text", "default": "#111111" },
-          { "type": "color", "id": "accent", "label": "Accent", "default": "#B89A5E" },
-          { "type": "color", "id": "button", "label": "Button background", "default": "#111111" },
-          { "type": "color", "id": "button_label", "label": "Button label", "default": "#FFFFFF" }
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient",
+            "info": "Overrides the solid background when set."
+          },
+          {
+            "type": "color",
+            "id": "background_alt",
+            "label": "Secondary background",
+            "default": "#F5F5F5",
+            "info": "Used for the try-on stage and soft panels."
+          },
+          {
+            "type": "color",
+            "id": "card",
+            "label": "Product card background",
+            "default": "#F4F4F4"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#111111"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent",
+            "default": "#B89A5E"
+          },
+          {
+            "type": "color",
+            "id": "button",
+            "label": "Button background",
+            "default": "#111111"
+          },
+          {
+            "type": "color",
+            "id": "button_label",
+            "label": "Button label",
+            "default": "#FFFFFF"
+          }
         ],
         "role": {
           "text": "text",
-          "background": { "solid": "background", "gradient": "background" },
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
           "links": "text",
           "icons": "text",
           "primary_button": "button",
@@ -40,33 +85,103 @@
   {
     "name": "Typography",
     "settings": [
-      { "type": "font_picker", "id": "type_body_font", "label": "Body font", "default": "inter_n4" },
-      { "type": "font_picker", "id": "type_heading_font", "label": "Heading font", "default": "inter_n5" }
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "inter_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "inter_n5"
+      }
     ]
   },
   {
     "name": "Layout",
     "settings": [
-      { "type": "range", "id": "page_width", "label": "Page width", "min": 1200, "max": 2000, "step": 40, "unit": "px", "default": 1920 },
-      { "type": "range", "id": "button_radius", "label": "Button corner radius", "min": 0, "max": 24, "step": 1, "unit": "px", "default": 2 },
-      { "type": "range", "id": "card_radius", "label": "Product card corner radius", "min": 0, "max": 24, "step": 1, "unit": "px", "default": 0 }
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 1200,
+        "max": 2000,
+        "step": 40,
+        "unit": "px",
+        "default": 1920
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "label": "Button corner radius",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "Product card corner radius",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      }
     ]
   },
   {
     "name": "Product cards",
     "settings": [
-      { "type": "checkbox", "id": "card_show_secondary_image", "label": "Show second image on hover", "default": true },
-      { "type": "checkbox", "id": "card_quick_add", "label": "Enable quick add", "default": true },
-      { "type": "checkbox", "id": "card_show_swatches", "label": "Show color swatches", "default": true },
-      { "type": "text", "id": "color_option_names", "label": "Color option names", "default": "Color, Colour", "info": "Comma separated. Used to find the option shown as swatches." },
-      { "type": "text", "id": "size_option_names", "label": "Size option names", "default": "Size", "info": "Comma separated. Used for quick add size buttons." },
+      {
+        "type": "checkbox",
+        "id": "card_show_secondary_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_quick_add",
+        "label": "Enable quick add",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_swatches",
+        "label": "Show color swatches",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "color_option_names",
+        "label": "Color option names",
+        "default": "Color, Colour",
+        "info": "Comma separated. Used to find the option shown as swatches."
+      },
+      {
+        "type": "text",
+        "id": "size_option_names",
+        "label": "Size option names",
+        "default": "Size",
+        "info": "Comma separated. Used for quick add size buttons."
+      },
       {
         "type": "select",
         "id": "card_image_fit",
         "label": "Image fit",
         "options": [
-          { "value": "contain", "label": "Contain (cut-out product shots)" },
-          { "value": "cover", "label": "Cover (lifestyle shots)" }
+          {
+            "value": "contain",
+            "label": "Contain (cut-out product shots)"
+          },
+          {
+            "value": "cover",
+            "label": "Cover (lifestyle shots)"
+          }
         ],
         "default": "contain"
       }
@@ -80,38 +195,106 @@
         "id": "cart_type",
         "label": "Cart type",
         "options": [
-          { "value": "drawer", "label": "Drawer" },
-          { "value": "page", "label": "Page" }
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
         ],
         "default": "drawer"
       },
-      { "type": "number", "id": "free_shipping_threshold", "label": "Free shipping threshold", "info": "In your store's default currency. Converted automatically for other currencies. Set to 0 to hide the progress bar.", "default": 150 },
-      { "type": "checkbox", "id": "cart_notes", "label": "Enable cart notes", "default": true },
-      { "type": "checkbox", "id": "cart_drawer_checkout_buttons", "label": "Show accelerated checkout buttons in cart drawer", "default": false }
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "In your store's default currency. Converted automatically for other currencies. Set to 0 to hide the progress bar.",
+        "default": 150
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_notes",
+        "label": "Enable cart notes",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_checkout_buttons",
+        "label": "Show accelerated checkout buttons in cart drawer",
+        "default": false
+      }
     ]
   },
   {
     "name": "Social media",
     "settings": [
-      { "type": "text", "id": "social_instagram_link", "label": "Instagram", "info": "https://instagram.com/shopify" },
-      { "type": "text", "id": "social_facebook_link", "label": "Facebook", "info": "https://facebook.com/shopify" },
-      { "type": "text", "id": "social_tiktok_link", "label": "TikTok", "info": "https://tiktok.com/@shopify" },
-      { "type": "text", "id": "social_twitter_link", "label": "X (Twitter)", "info": "https://x.com/shopify" },
-      { "type": "text", "id": "social_youtube_link", "label": "YouTube", "info": "https://youtube.com/shopify" },
-      { "type": "text", "id": "social_pinterest_link", "label": "Pinterest", "info": "https://pinterest.com/shopify" }
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https://facebook.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok",
+        "info": "https://tiktok.com/@shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "X (Twitter)",
+        "info": "https://x.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube",
+        "info": "https://youtube.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest",
+        "info": "https://pinterest.com/shopify"
+      }
     ]
   },
   {
     "name": "Search",
     "settings": [
-      { "type": "checkbox", "id": "predictive_search_enabled", "label": "Enable search suggestions", "default": true },
-      { "type": "text", "id": "search_suggestions", "label": "Popular searches", "default": "Tee, Denim, Jacket, Cap", "info": "Comma separated chips shown in the search panel." }
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "label": "Enable search suggestions",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "search_suggestions",
+        "label": "Popular searches",
+        "default": "Tee, Denim, Jacket, Cap",
+        "info": "Comma separated chips shown in the search panel."
+      }
     ]
   },
   {
     "name": "Favicon",
     "settings": [
-      { "type": "image_picker", "id": "favicon", "label": "Favicon image", "info": "Will be scaled down to 32 × 32px" }
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32 × 32px"
+      }
     ]
   },
   {

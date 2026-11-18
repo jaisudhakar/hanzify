@@ -1,7 +1,7 @@
 {
-  "current": "Default",
+  "current": "Hanzify",
   "presets": {
-    "Default": {
+    "Hanzify": {
       "type_body_font": "inter_n4",
       "type_heading_font": "inter_n5",
       "page_width": 1920,
@@ -20,7 +20,8 @@
             "text": "#111111",
             "accent": "#B89A5E",
             "button": "#111111",
-            "button_label": "#FFFFFF"
+            "button_label": "#FFFFFF",
+            "background_gradient": ""
           }
         },
         "scheme-2": {
@@ -31,7 +32,8 @@
             "text": "#111111",
             "accent": "#B89A5E",
             "button": "#111111",
-            "button_label": "#FFFFFF"
+            "button_label": "#FFFFFF",
+            "background_gradient": ""
           }
         },
         "scheme-3": {
@@ -42,7 +44,8 @@
             "text": "#FFFFFF",
             "accent": "#B89A5E",
             "button": "#FFFFFF",
-            "button_label": "#111111"
+            "button_label": "#111111",
+            "background_gradient": ""
           }
         },
         "scheme-4": {
@@ -53,7 +56,8 @@
             "text": "#111111",
             "accent": "#B89A5E",
             "button": "#111111",
-            "button_label": "#F3EFE6"
+            "button_label": "#F3EFE6",
+            "background_gradient": ""
           }
         }
       }

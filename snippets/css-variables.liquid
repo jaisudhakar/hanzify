@@ -46,6 +46,7 @@
     -%}
     {{ selector }} {
       --bg: {{ s.background }};
+      --bg-gradient: {{ s.background_gradient | default: s.background }};
       --bg-alt: {{ s.background_alt }};
       --stage: {{ s.background_alt }};
       --card: {{ s.card }};
@@ -60,7 +61,7 @@
   {% endfor %}
 
   {% for scheme in settings.color_schemes -%}
-    .color-{{ scheme.id }} { background-color: var(--bg); color: var(--ink); }
+    .color-{{ scheme.id }} { background: var(--bg-gradient); color: var(--ink); }
   {% endfor %}
 
   body { font-family: var(--font-body); }
