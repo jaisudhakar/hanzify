@@ -1,0 +1,58 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign products = section.settings.products
+  assign limit = section.settings.limit
+  assign view_all = section.settings.view_all_url | default: collection.url
+-%}
+<section class="pslider color-{{ section.settings.color_scheme }}" data-slider-root>
+  <div class="pslider__head">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pslider__title">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <div class="pslider__actions">
+      {%- if section.settings.view_all_label != blank and view_all != blank -%}
+        <a class="pill" href="{{ view_all }}">{{ section.settings.view_all_label | escape }}</a>
+      {%- endif -%}
+      <button class="round" type="button" data-slider-prev aria-label="{{ 'accessibility.previous' | t }}">{% render 'icon', icon: 'chev_l' %}</button>
+      <button class="round" type="button" data-slider-next aria-label="{{ 'accessibility.next' | t }}">{% render 'icon', icon: 'chev_r' %}</button>
+    </div>
+  </div>
+  <div class="slider" data-slider-track role="list">
+    {%- if products != blank -%}
+      {%- for p in products limit: limit -%}
+        <div role="listitem">{% render 'product-card', card_product: p, index: forloop.index0 %}</div>
+      {%- endfor -%}
+    {%- elsif collection != blank -%}
+      {%- for p in collection.products limit: limit -%}
+        <div role="listitem">{% render 'product-card', card_product: p, index: forloop.index0 %}</div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..6) -%}
+        <div role="listitem">
+          <article class="card">
+            <div class="card__media">{{ 'product-apparel-' | append: forloop.index | placeholder_svg_tag: 'placeholder' }}</div>
+            <div class="card__info"><h3 class="card__title">{{ 'onboarding.product_title' | t }}</h3><span class="card__price">{{ 4900 | money }}</span></div>
+          </article>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product slider",
+  "tag": "div",
+  "class": "section-pslider",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "product_list", "id": "products", "label": "Or pick products", "limit": 24, "info": "Overrides the collection." },
+    { "type": "range", "id": "limit", "label": "Maximum products", "min": 2, "max": 24, "step": 1, "default": 12 },
+    { "type": "text", "id": "view_all_label", "label": "View all label", "default": "View all" },
+    { "type": "url", "id": "view_all_url", "label": "View all link", "info": "Defaults to the collection." },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Product slider" }]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{%- comment -%}
+  Outputs the zero-based position of the first product option whose name matches
+  one of the comma separated `names`, or nothing when there is no match.
+  Usage: {% capture size_index %}{% render 'option-index', product: product, names: settings.size_option_names %}{% endcapture %}
+{%- endcomment -%}
+{%- liquid
+  assign list = names | downcase | split: ','
+  for option in product.options_with_values
+    assign oname = option.name | downcase | strip
+    for n in list
+      assign n2 = n | strip
+      if n2 == oname
+        echo forloop.parentloop.index0
+        break
+      endif
+    endfor
+  endfor
+-%}

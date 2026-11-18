@@ -1,0 +1,18 @@
+{%- assign gid = 'Recipient-' | append: section.id -%}
+<div class="gift-recipient" data-gift-recipient>
+  <label class="gift-recipient__toggle" for="{{ gid }}-checkbox">
+    <input type="checkbox" id="{{ gid }}-checkbox" name="properties[__shopify_send_gift_card_to_recipient]" value="on" data-gift-toggle>
+    {{ 'recipient.form.checkbox' | t }}
+  </label>
+  <div class="gift-recipient__fields" data-gift-fields hidden>
+    <label for="{{ gid }}-email">{{ 'recipient.form.email_label' | t }}</label>
+    <input class="field" id="{{ gid }}-email" type="email" name="properties[Recipient email]" placeholder="{{ 'recipient.form.email' | t }}" autocomplete="email" disabled>
+    <label for="{{ gid }}-name">{{ 'recipient.form.name_label' | t }}</label>
+    <input class="field" id="{{ gid }}-name" type="text" name="properties[Recipient name]" placeholder="{{ 'recipient.form.name' | t }}" disabled>
+    <label for="{{ gid }}-message">{{ 'recipient.form.message' | t }}</label>
+    <textarea class="field" id="{{ gid }}-message" name="properties[Message]" maxlength="200" rows="3" disabled></textarea>
+    <label for="{{ gid }}-date">{{ 'recipient.form.send_on' | t }}</label>
+    <input class="field" id="{{ gid }}-date" type="date" name="properties[Send on]" pattern="\d{4}-\d{2}-\d{2}" disabled>
+    <input type="hidden" name="properties[__shopify_offset]" value="" data-gift-offset disabled>
+  </div>
+</div>

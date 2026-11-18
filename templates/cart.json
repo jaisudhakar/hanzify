@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "main": { "type": "main-cart", "settings": {} },
+    "featured": { "type": "product-slider", "settings": { "heading": "You may also like", "collection": "all", "limit": 12, "view_all_label": "View all", "color_scheme": "scheme-1" } }
+  },
+  "order": ["main", "featured"]
+}

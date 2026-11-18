@@ -1,0 +1,124 @@
+{%- liquid
+  if section.settings.demo_set == 'bottoms'
+    assign demo_model = 'demo-m-black-denim-model.webp'
+    assign demo_items = 'demo-p-terrain-wash-sweatpant.webp,demo-p-wide-leg-washed-black-denim.webp,demo-p-raw-denim-washed.webp,demo-p-north-topographic-sweatpant.webp,demo-p-wide-leg-washed-black-denim.webp' | split: ','
+  else
+    assign demo_model = 'demo-m-core-heavy-tee.webp'
+    assign demo_items = 'demo-p-no-direction-tee-gradient.webp,demo-p-offgrid-shell-jacket.webp,demo-p-field-shell-001-jacket.webp,demo-p-essential-oversized-hoodie.webp,demo-p-no-direction-tee.webp' | split: ','
+  endif
+  assign is_first = false
+  if section.index == 1
+    assign is_first = true
+  endif
+  assign stage_sizes = '(min-width: 990px) 61vh, (min-width: 750px) 60vw, 88vw'
+-%}
+<section class="tryon color-{{ section.settings.color_scheme }}" data-tryon id="tryon-{{ section.id }}" aria-label="{{ section.settings.heading | escape }}" tabindex="-1" {{ section.shopify_attributes }}>
+  <script type="application/json" data-tryon-json>
+    [
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign title = block.settings.title | default: p.title | default: 'Product title'
+          assign url = block.settings.link | default: p.url | default: routes.all_products_collection_url
+          assign price = ''
+          if p != blank
+            assign price = p.price | money | strip_html
+          endif
+        -%}
+        { "label": {{ block.settings.label | json }}, "title": {{ title | json }}, "price": {{ price | json }}, "url": {{ url | json }} }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+  <div class="tryon__sticky">
+    <div class="tryon__copy">
+      {%- if section.settings.heading != blank -%}<h2 class="visually-hidden">{{ section.settings.heading | escape }}</h2>{%- endif -%}
+      <span class="tryon__label" data-tryon-label></span>
+      <p class="tryon__title" data-tryon-title></p>
+      <span class="tryon__price" data-tryon-price></span>
+      <a class="btn-ghost" href="{{ section.blocks.first.settings.product.url | default: routes.all_products_collection_url }}" data-tryon-link>
+        {{- section.settings.button_label | escape }} {% render 'icon', icon: 'arrow' -%}
+      </a>
+    </div>
+    <div class="tryon__stage">
+      {%- if is_first -%}
+        {%- render 'media-image', image: section.settings.model_image, demo: demo_model, class: 'tryon__layer tryon__model', alt: section.settings.model_alt, sizes: stage_sizes, lazy: false, fallback: 'product-apparel-1' -%}
+      {%- else -%}
+        {%- render 'media-image', image: section.settings.model_image, demo: demo_model, class: 'tryon__layer tryon__model', alt: section.settings.model_alt, sizes: stage_sizes, fallback: 'product-apparel-1' -%}
+      {%- endif -%}
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign p = block.settings.product
+          assign img = block.settings.image | default: p.featured_media.preview_image
+          assign demo_index = forloop.index0 | modulo: 5
+          assign demo = demo_items[demo_index]
+          assign eager = false
+          if is_first and forloop.first
+            assign eager = true
+          endif
+        -%}
+        <div class="tryon__layer tryon__garment" {{ block.shopify_attributes }}>
+          {%- if eager -%}
+            {%- render 'media-image', image: img, demo: demo, class: 'tryon__img', alt: '', sizes: stage_sizes, lazy: false, fallback: 'product-apparel-2' -%}
+          {%- else -%}
+            {%- render 'media-image', image: img, demo: demo, class: 'tryon__img', alt: '', sizes: stage_sizes, fallback: 'product-apparel-2' -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.hint != blank -%}
+      <p class="tryon__hint" data-tryon-hint>{{ section.settings.hint | escape }} {% render 'icon', icon: 'arrow' %}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Try-on stage",
+  "tag": "div",
+  "class": "section-tryon",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "paragraph", "content": "Garments slide onto the model as customers scroll or drag. For a perfect fit, upload transparent cut-out images exported on the same canvas size as the model photo (4:5)." },
+    { "type": "text", "id": "heading", "label": "Accessible heading", "default": "Try on tops", "info": "Read by screen readers only." },
+    { "type": "image_picker", "id": "model_image", "label": "Model image" },
+    { "type": "text", "id": "model_alt", "label": "Model image alt text", "default": "Model" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop Now" },
+    { "type": "text", "id": "hint", "label": "Drag hint", "default": "Drag to explore" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    {
+      "type": "select",
+      "id": "demo_set",
+      "label": "Demo media set",
+      "info": "Bundled imagery used while images are empty and demo imagery is on (Theme settings > Demo content).",
+      "options": [
+        { "value": "tops", "label": "Tops" },
+        { "value": "bottoms", "label": "Bottoms" }
+      ],
+      "default": "tops"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "garment",
+      "name": "Garment",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "image_picker", "id": "image", "label": "Cut-out image", "info": "Transparent PNG/WebP aligned to the model. Defaults to the product's featured image." },
+        { "type": "text", "id": "label", "label": "Label", "default": "Core Essentials" },
+        { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the product title." },
+        { "type": "url", "id": "link", "label": "Link", "info": "Defaults to the product page." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Try-on stage",
+      "blocks": [
+        { "type": "garment", "settings": { "label": "Core Essentials" } },
+        { "type": "garment", "settings": { "label": "Field System - 001" } },
+        { "type": "garment", "settings": { "label": "Graphic Series 2026" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

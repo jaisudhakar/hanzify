@@ -1,0 +1,53 @@
+<aside class="drawer drawer--right" id="cart-drawer" data-cart-count-value="{{ cart.item_count }}" aria-hidden="true" aria-label="{{ 'sections.cart.title' | t }}" role="dialog" aria-modal="true" tabindex="-1">
+  <div class="drawer__head">
+    <span class="label">{{ 'sections.cart.title_count' | t: count: cart.item_count }}</span>
+    <button class="drawer__close" type="button" data-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
+  </div>
+  <div class="drawer__body">
+    {%- render 'ship-meter' -%}
+    <div class="cart-items" data-cart-items>
+      {%- if cart.item_count > 0 -%}
+        {%- for item in cart.items -%}
+          {%- render 'cart-line-item', item: item, index: forloop.index -%}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="cart-empty">
+          <p>{{ 'sections.cart.empty' | t }}</p>
+          <a class="btn" href="{{ routes.all_products_collection_url }}">{{ 'general.continue_shopping' | t }} {% render 'icon', icon: 'arrow' %}</a>
+          {%- if shop.customer_accounts_enabled and customer == null -%}
+            <p class="cart-empty__login">{{ 'sections.cart.login_html' | t: link: routes.account_login_url }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if cart.item_count > 0 -%}
+    <form class="drawer__foot" action="{{ routes.cart_url }}" method="post" novalidate>
+      {%- if settings.cart_notes -%}
+        <details class="cart-note-field">
+          <summary class="label">{{ 'sections.cart.note' | t }}</summary>
+          <label class="visually-hidden" for="CartDrawerNote">{{ 'sections.cart.note' | t }}</label>
+          <textarea class="field" id="CartDrawerNote" name="note" rows="2" data-cart-note>{{ cart.note }}</textarea>
+        </details>
+      {%- endif -%}
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <div class="cart-subtotal cart-subtotal--discount"><span>{{ discount.title | escape }}</span><span>-{{ discount.total_allocated_amount | money }}</span></div>
+      {%- endfor -%}
+      <div class="cart-subtotal"><span>{{ 'sections.cart.subtotal' | t }}</span><span data-cart-subtotal>{{ cart.total_price | money_with_currency }}</span></div>
+      <p class="cart-note">
+        {%- if cart.duties_included and cart.taxes_included -%}
+          {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout' | t }}
+        {%- elsif cart.taxes_included -%}
+          {{ 'sections.cart.taxes_included_shipping_at_checkout' | t }}
+        {%- else -%}
+          {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+        {%- endif -%}
+      </p>
+      <button class="btn btn--block" type="submit" name="checkout">{{ 'sections.cart.checkout' | t }} {% render 'icon', icon: 'arrow' %}</button>
+      <a class="cart-drawer__view link-underline" href="{{ routes.cart_url }}">{{ 'sections.cart.view_cart' | t }}</a>
+      {%- if settings.cart_drawer_checkout_buttons and additional_checkout_buttons -%}
+        <div class="cart-page__dynamic">{{ content_for_additional_checkout_buttons }}</div>
+      {%- endif -%}
+    </form>
+  {%- endif -%}
+</aside>

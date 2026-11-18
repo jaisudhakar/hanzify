@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": { "source": "collection" } },
+        "title": { "type": "title", "settings": {} },
+        "price": { "type": "price", "settings": { "show_sku": false } },
+        "description": { "type": "description", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": { "color_swatches": true, "show_demo_size_guide": true } },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_quantity": true, "show_dynamic_checkout": true, "show_gift_card_recipient": true } },
+        "perks": { "type": "perks", "settings": {} },
+        "details": { "type": "collapsible_tab", "settings": { "heading": "Fit & sizing", "content": "<p>Oversized, relaxed fit. Take your usual size for the intended look, or size down for a closer fit. Model is 186 cm and wears size L.</p>", "open": true } },
+        "shipping": { "type": "collapsible_tab", "settings": { "heading": "Shipping & returns", "content": "<p>Orders ship within 1–2 business days. Free standard shipping over $150. Free returns within 30 days on unworn items with tags attached.</p>" } },
+        "care": { "type": "collapsible_tab", "settings": { "heading": "Care", "content": "<p>Machine wash cold, inside out. Do not tumble dry. Iron on reverse. Washed and dyed garments may vary slightly — that’s the point.</p>" } }
+      },
+      "block_order": ["eyebrow", "title", "price", "description", "variant_picker", "buy_buttons", "perks", "details", "shipping", "care"],
+      "settings": { "first_cover": false, "secondary_cover": true, "sticky_atc": true, "update_url": true }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": { "eyebrow": "You may also like", "heading": "More from [collection]", "intent": "related", "limit": 8, "color_scheme": "scheme-1" }
+    }
+  },
+  "order": ["main", "related"]
+}

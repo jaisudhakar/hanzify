@@ -1,0 +1,45 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div>
+      <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><span>{{ blog.title | escape }}</span></nav>
+      <h1 class="display h1">{{ blog.title | escape }}</h1>
+    </div>
+    {%- if blog.all_tags.size > 0 -%}
+      <div class="tabs">
+        <a class="tab tab--link{% unless current_tags %} is-active{% endunless %}" href="{{ blog.url }}">{{ 'sections.collection.all' | t }}</a>
+        {%- for tag in blog.all_tags -%}
+          <a class="tab tab--link{% if current_tags contains tag %} is-active{% endif %}" href="{{ blog.url }}/tagged/{{ tag | handleize }}">{{ tag | escape }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    {%- paginate blog.articles by 9 -%}
+      <div class="grid grid--3 blog-grid">
+        {%- for article in blog.articles -%}
+          <article class="article-card" data-reveal style="--d:{{ forloop.index0 | modulo: 3 | times: 0.08 }}s">
+            <a class="article-card__media" href="{{ article.url }}" tabindex="-1">
+              {%- if article.image -%}
+                {{ article.image | image_url: width: 900 | image_tag: alt: article.image.alt, loading: 'lazy', sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw', widths: '360, 540, 720, 900' }}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+              {%- endif -%}
+            </a>
+            <p class="label label--muted">{{ article.published_at | time_tag: format: 'date' }}</p>
+            <h2 class="article-card__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+            <p class="article-card__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+          </article>
+        {%- else -%}
+          <p class="empty-state">{{ 'templates.blog.empty' | t }}</p>
+        {%- endfor -%}
+      </div>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Blog posts", "settings": [] }
+{% endschema %}

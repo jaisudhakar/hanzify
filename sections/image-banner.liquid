@@ -1,0 +1,30 @@
+<section class="banner" aria-label="{{ section.settings.heading | strip_html | escape }}" data-nav-dark>
+  <div class="banner__media"{% if section.settings.parallax %} data-parallax{% endif %}>
+    {%- render 'media-image', image: section.settings.image, demo: 'demo-banner-morocco.webp', class: 'banner__img', sizes: '100vw', width: 1672, height: 941, fallback: 'lifestyle-2' -%}
+  </div>
+  <div class="container banner__content">
+    <div>
+      {%- if section.settings.heading != blank -%}<h2 class="banner__title">{{ section.settings.heading | escape | newline_to_br }}</h2>{%- endif -%}
+      {%- if section.settings.text != blank -%}<div class="lead">{{ section.settings.text }}</div>{%- endif -%}
+    </div>
+    {%- if section.settings.button_label != blank -%}
+      <a class="btn btn--light" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} {% render 'icon', icon: 'arrow' %}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image banner",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "parallax", "label": "Parallax effect", "default": true },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Somewhere\nnorth." },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Image banner" }]
+}
+{% endschema %}

@@ -1,0 +1,76 @@
+{%- liquid
+  assign sort_by = search.sort_by | default: search.default_sort_by
+  assign terms = search.terms | escape
+-%}
+<div data-collection-root data-section-id="{{ section.id }}">
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><span>{{ 'templates.search.title' | t }}</span></nav>
+      <h1 class="display h2">{{ 'templates.search.title' | t }}</h1>
+      <form class="search-page__form" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="SearchPageInput">{{ 'templates.search.placeholder' | t: shop: shop.name }}</label>
+        <input class="search-panel__input" id="SearchPageInput" type="search" name="q" value="{{ terms }}" placeholder="{{ 'templates.search.placeholder' | t: shop: shop.name | escape }}">
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="nav__btn" aria-label="{{ 'templates.search.submit' | t }}">{% render 'icon', icon: 'search' %}</button>
+      </form>
+    </div>
+  </section>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <div class="toolbar">
+        <div class="container toolbar__inner">
+          <div class="tabs">
+            {%- if search.filters.size > 0 -%}
+              <button type="button" class="tab tab--filter" data-open="facets-drawer">{% render 'icon', icon: 'filter' %} {{ 'sections.collection.filter' | t }}</button>
+            {%- endif -%}
+          </div>
+          <div class="toolbar__right">
+            <span class="label label--muted">{{ 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</span>
+            <div class="select">
+              <label class="visually-hidden" for="SortBy-{{ section.id }}">{{ 'sections.collection.sort_by' | t }}</label>
+              <select id="SortBy-{{ section.id }}" name="sort_by" data-sort-select>
+                {%- for option in search.sort_options -%}
+                  <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>
+                {%- endfor -%}
+              </select>
+              {%- render 'icon', icon: 'chev' -%}
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="container collection-grid">
+        {%- if search.results_count > 0 -%}
+          <div class="grid" data-col-grid>
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {%- render 'product-card', card_product: item, index: forloop.index0 -%}
+                {%- else -%}
+                  <article class="card card--text" data-reveal>
+                    <a class="card__media card__media--text" href="{{ item.url }}">
+                      {%- if item.image -%}
+                        {{ item.image | image_url: width: 600 | image_tag: alt: item.title, loading: 'lazy' }}
+                      {%- else -%}
+                        <span class="label">{{ item.object_type }}</span>
+                      {%- endif -%}
+                    </a>
+                    <div class="card__info"><h3 class="card__title"><a href="{{ item.url }}">{{ item.title | escape }}</a></h3>
+                    <span class="card__price">{{ item.content | strip_html | truncatewords: 12 }}</span></div>
+                  </article>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <p class="empty-state">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+        {%- endif -%}
+        {%- render 'pagination', paginate: paginate -%}
+      </section>
+    {%- endpaginate -%}
+    {%- render 'facets', results: search, sort_by: sort_by, terms: search.terms -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Search results", "settings": [] }
+{% endschema %}

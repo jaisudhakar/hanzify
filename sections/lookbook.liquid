@@ -1,0 +1,58 @@
+{%- assign demo_tiles = 'demo-banner-brutalist.webp,demo-ig-2.webp,demo-ig-3.webp,demo-banner-morocco.webp,demo-ig-4.webp,demo-ig-7.webp,demo-ig-6.webp,demo-banner-stormy-peaks.webp,demo-ig-5.webp,demo-ig-1.webp' | split: ',' -%}
+<section class="section color-{{ section.settings.color_scheme }}">
+  <div class="container">
+    <div class="masonry" style="columns: {{ section.settings.columns }} 320px">
+      {%- for block in section.blocks -%}
+        {%- assign d = forloop.index0 | modulo: 3 | times: 0.08 -%}
+        {%- assign demo_index = forloop.index0 | modulo: 10 -%}
+        <figure data-reveal style="--d:{{ d }}s" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+          {%- render 'media-image', image: block.settings.image, demo: demo_tiles[demo_index], alt: block.settings.caption, sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw', width: 800, height: 993, fallback: 'lifestyle-1' -%}
+          {%- if block.settings.link != blank -%}</a>{%- endif -%}
+          {%- if block.settings.caption != blank -%}<figcaption class="label">{{ block.settings.caption | escape }}</figcaption>{%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.button_label != blank -%}
+      <div class="lookbook__cta"><a class="btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} {% render 'icon', icon: 'arrow' %}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lookbook gallery",
+  "tag": "div",
+  "max_blocks": 30,
+  "settings": [
+    { "type": "range", "id": "columns", "label": "Columns on desktop", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the looks" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lookbook gallery",
+      "blocks": [
+        { "type": "image", "settings": { "caption": "Brutalist / Soft light" } },
+        { "type": "image", "settings": { "caption": "Night / 01:17" } },
+        { "type": "image", "settings": { "caption": "No Direction" } },
+        { "type": "image", "settings": { "caption": "Morocco / Dusk" } },
+        { "type": "image", "settings": { "caption": "Cold air" } },
+        { "type": "image", "settings": { "caption": "Contact sheet" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

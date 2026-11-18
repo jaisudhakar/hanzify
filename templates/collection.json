@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "show_hero": true,
+        "eyebrow": "Collection",
+        "products_per_page": 24,
+        "columns": 4,
+        "enable_filtering": true,
+        "show_type_tabs": true,
+        "enable_sorting": true,
+        "other_menu": "footer",
+        "other_heading": "Other collections"
+      }
+    }
+  },
+  "order": ["main"]
+}

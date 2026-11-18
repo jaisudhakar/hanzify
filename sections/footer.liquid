@@ -1,0 +1,128 @@
+{%- liquid
+  assign menu = linklists[section.settings.menu]
+  assign show_country = false
+  if section.settings.enable_country_selector and localization.available_countries.size > 1
+    assign show_country = true
+  endif
+  assign show_language = false
+  if section.settings.enable_language_selector and localization.available_languages.size > 1
+    assign show_language = true
+  endif
+-%}
+<footer class="site-footer color-{{ section.settings.color_scheme }}">
+  <div class="site-footer__main">
+    {%- if section.settings.show_newsletter -%}
+      <div class="site-footer__newsletter">
+        {%- if section.settings.newsletter_heading != blank -%}
+          <p class="site-footer__heading">{{ section.settings.newsletter_heading | escape }}</p>
+        {%- endif -%}
+        {%- form 'customer', id: 'FooterNewsletter', class: 'site-footer__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="visually-hidden" for="FooterNewsletterEmail">{{ 'newsletter.label' | t }}</label>
+          <input id="FooterNewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" required autocomplete="email" placeholder="{{ 'newsletter.label' | t }}">
+          <button type="submit" aria-label="{{ 'newsletter.button_label' | t }}">{% render 'icon', icon: 'arrow' %}</button>
+          {%- if form.posted_successfully? -%}
+            <p class="site-footer__msg" role="status">{{ 'newsletter.success' | t }}</p>
+          {%- elsif form.errors -%}
+            <p class="site-footer__msg" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+
+    <p class="site-footer__copy">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}
+      {%- if section.settings.copyright_text != blank %} &middot; {{ section.settings.copyright_text | escape }}{% endif -%}
+    </p>
+    <div class="site-footer__links">
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}">{{ link.title | escape }}</a>
+      {%- endfor -%}
+      {%- if section.settings.show_policies -%}
+        {%- for policy in shop.policies -%}
+          {%- if policy != blank -%}<a href="{{ policy.url }}">{{ policy.title | escape }}</a>{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="site-footer__side">
+    {%- if show_country or show_language -%}
+      <div class="site-footer__localization">
+        {%- if show_country -%}
+          {%- form 'localization', class: 'localization-form', data-localization-form: '' -%}
+            <label class="visually-hidden" for="FooterCountry-{{ section.id }}">{{ 'localization.country_label' | t }}</label>
+            <div class="select">
+              <select id="FooterCountry-{{ section.id }}" name="country_code" data-autosubmit>
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>
+                    {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                  </option>
+                {%- endfor -%}
+              </select>
+              {%- render 'icon', icon: 'chev' -%}
+            </div>
+            <noscript><button class="btn btn--outline" type="submit">{{ 'localization.update' | t }}</button></noscript>
+          {%- endform -%}
+        {%- endif -%}
+        {%- if show_language -%}
+          {%- form 'localization', class: 'localization-form', data-localization-form: '' -%}
+            <label class="visually-hidden" for="FooterLanguage-{{ section.id }}">{{ 'localization.language_label' | t }}</label>
+            <div class="select">
+              <select id="FooterLanguage-{{ section.id }}" name="language_code" data-autosubmit>
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>
+                    {{ language.endonym_name | capitalize }}
+                  </option>
+                {%- endfor -%}
+              </select>
+              {%- render 'icon', icon: 'chev' -%}
+            </div>
+            <noscript><button class="btn btn--outline" type="submit">{{ 'localization.update' | t }}</button></noscript>
+          {%- endform -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <ul class="site-footer__payments" role="list">
+        <li class="visually-hidden">{{ 'sections.footer.payment' | t }}</li>
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if section.settings.show_follow_on_shop and shop.features.follow_on_shop? -%}
+      <div class="site-footer__follow">{{ shop | login_button: action: 'follow' }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.show_social -%}
+      {%- render 'social-icons', class: 'site-footer__social' -%}
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" },
+    { "type": "checkbox", "id": "show_policies", "label": "Show policy links", "default": false },
+    { "type": "text", "id": "copyright_text", "label": "Copyright text" },
+    { "type": "header", "content": "Newsletter" },
+    { "type": "checkbox", "id": "show_newsletter", "label": "Show email signup", "default": false, "info": "Subscribers are added to your Shopify customer list with accepted marketing." },
+    { "type": "text", "id": "newsletter_heading", "label": "Heading", "default": "Join the list" },
+    { "type": "header", "content": "Country/region and language" },
+    { "type": "checkbox", "id": "enable_country_selector", "label": "Show country/region selector", "default": true, "info": "Add countries in Settings > Markets." },
+    { "type": "checkbox", "id": "enable_language_selector", "label": "Show language selector", "default": true, "info": "Add languages in Settings > Languages." },
+    { "type": "header", "content": "Extras" },
+    { "type": "checkbox", "id": "show_social", "label": "Show social media icons", "default": true, "info": "Links are set in Theme settings > Social media." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": false },
+    { "type": "checkbox", "id": "show_follow_on_shop", "label": "Show Follow on Shop", "default": true, "info": "Requires Shop Pay." }
+  ]
+}
+{% endschema %}

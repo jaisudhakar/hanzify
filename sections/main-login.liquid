@@ -1,0 +1,43 @@
+<section class="section">
+  <div class="container account-grid">
+    <div>
+      <div class="account-form" id="login" data-recover-toggle-target>
+        <h1 class="display h2">{{ 'customer.login_page.title' | t }}</h1>
+        {%- form 'customer_login', novalidate: 'novalidate' -%}
+          {%- if form.errors -%}<div class="errors" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <label for="CustomerEmail">{{ 'customer.login_page.email' | t }}</label>
+          <input class="field" type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" autocorrect="off" autocapitalize="off" required>
+          {%- if form.password_needed -%}
+            <label for="CustomerPassword">{{ 'customer.login_page.password' | t }}</label>
+            <input class="field" type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password" required>
+            <a href="#recover" class="cart-note">{{ 'customer.login_page.forgot_password' | t }}</a>
+          {%- endif -%}
+          <button class="btn btn--block" type="submit">{{ 'customer.login_page.sign_in' | t }}</button>
+          <a class="link-underline" href="{{ routes.account_register_url }}">{{ 'customer.login_page.create_account' | t }}</a>
+        {%- endform -%}
+      </div>
+
+      <div class="account-form" id="recover" style="margin-top:56px">
+        <h2 class="display h3">{{ 'customer.recover_password.title' | t }}</h2>
+        <p class="cart-note">{{ 'customer.recover_password.subtext' | t }}</p>
+        {%- form 'recover_customer_password' -%}
+          {%- if form.errors -%}<div class="errors" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          {%- if form.posted_successfully? -%}<p class="form-message" role="status">{{ 'customer.recover_password.success' | t }}</p>{%- endif -%}
+          <label for="RecoverEmail">{{ 'customer.login_page.email' | t }}</label>
+          <input class="field" type="email" name="email" id="RecoverEmail" autocomplete="email" required>
+          <button class="btn btn--outline" type="submit">{{ 'customer.login_page.submit' | t }}</button>
+        {%- endform -%}
+      </div>
+
+      {%- if shop.checkout.guest_login -%}
+        <div class="account-form" style="margin-top:56px">
+          <h2 class="display h3">{{ 'customer.login_page.guest_title' | t }}</h2>
+          {%- form 'guest_login' -%}<button class="btn btn--outline" type="submit">{{ 'customer.login_page.guest_continue' | t }}</button>{%- endform -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Customer login", "settings": [] }
+{% endschema %}

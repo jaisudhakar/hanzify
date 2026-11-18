@@ -1,0 +1,19 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "buy-bar": {
+      "type": "buy-bar",
+      "settings": { "product": "off-grid-headband", "subtitle": "Products", "direct_add": true }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "menu": "footer",
+        "show_social": true
+      }
+    }
+  },
+  "order": ["buy-bar", "footer"]
+}

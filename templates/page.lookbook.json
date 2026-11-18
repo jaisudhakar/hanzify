@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "heading": {
+      "type": "page-heading",
+      "settings": {
+        "show_breadcrumbs": true,
+        "eyebrow": "NØRTH Archive 001 — Film / 35mm — Morocco 2025",
+        "heading": "Lookbook",
+        "text": "<p>Shot across the High Atlas and the city after dark. Core Essentials and the Graphic Series 2026, worn the way they were meant to be.</p>",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "gallery": {
+      "type": "lookbook",
+      "blocks": {
+        "l1": { "type": "image", "settings": { "caption": "Brutalist / Soft light" } },
+        "l2": { "type": "image", "settings": { "caption": "Night / 01:17" } },
+        "l3": { "type": "image", "settings": { "caption": "No Direction" } },
+        "l4": { "type": "image", "settings": { "caption": "Morocco / Dusk" } },
+        "l5": { "type": "image", "settings": { "caption": "Cold air" } },
+        "l6": { "type": "image", "settings": { "caption": "Contact sheet" } },
+        "l7": { "type": "image", "settings": { "caption": "People move differently" } },
+        "l8": { "type": "image", "settings": { "caption": "Stormy peaks" } },
+        "l9": { "type": "image", "settings": { "caption": "Heavyweight" } },
+        "l10": { "type": "image", "settings": { "caption": "Somewhere north" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8", "l9", "l10"],
+      "settings": { "columns": 3, "button_label": "Shop the looks", "color_scheme": "scheme-1" }
+    }
+  },
+  "order": ["heading", "gallery"]
+}

@@ -1,0 +1,43 @@
+<section class="section color-{{ section.settings.color_scheme }}">
+  <div class="container story-grid{% if section.settings.image_position == 'right' %} story-grid--reverse{% endif %}">
+    <div data-reveal>
+      {%- render 'media-image', image: section.settings.image, demo: 'demo-ig-4.webp', alt: section.settings.image_alt, sizes: '(min-width: 990px) 50vw, 100vw', width: 800, height: 993, fallback: 'lifestyle-1' -%}
+    </div>
+    <div class="rte" data-reveal style="--d:.1s">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'eyebrow' -%}<span class="label label--muted" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</span>
+          {%- when 'heading' -%}<h2 id="{{ block.settings.anchor | handle }}" {{ block.shopify_attributes }}>{{ block.settings.heading | escape }}</h2>
+          {%- when 'text' -%}<div {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- when 'button' -%}
+            {%- if block.settings.label != blank -%}<p {{ block.shopify_attributes }}><a class="btn" href="{{ block.settings.link | default: routes.all_products_collection_url }}">{{ block.settings.label | escape }} {% render 'icon', icon: 'arrow' %}</a></p>{%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "select", "id": "image_position", "label": "Image position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    { "type": "eyebrow", "name": "Eyebrow", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Est. 2024" }] },
+    { "type": "heading", "name": "Heading", "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Heavyweight by default" }, { "type": "text", "id": "anchor", "label": "Anchor ID", "info": "Optional, e.g. shipping — link to it with #shipping." }] },
+    { "type": "text", "name": "Text", "settings": [{ "type": "richtext", "id": "text", "label": "Text", "default": "<p>Share the story behind your brand, your materials and the way you make things.</p>" }] },
+    { "type": "button", "name": "Button", "settings": [{ "type": "text", "id": "label", "label": "Label", "default": "Shop all" }, { "type": "url", "id": "link", "label": "Link" }] }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "blocks": [{ "type": "eyebrow" }, { "type": "heading" }, { "type": "text" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="container">
+    <p><a class="link-underline" href="{{ routes.account_url }}">{{ 'customer.account.return' | t }}</a></p>
+    <h1 class="display h2" style="margin:24px 0 32px">{{ 'customer.addresses.title' | t }}</h1>
+    <div class="account-grid">
+      <div>
+        {%- paginate customer.addresses by 10 -%}
+          {%- for address in customer.addresses -%}
+            <div class="address-card">
+              {%- if address == customer.default_address -%}<span class="label">{{ 'customer.addresses.default' | t }}</span>{%- endif -%}
+              {{ address | format_address }}
+              <details>
+                <summary class="link-underline">{{ 'customer.addresses.edit' | t }}</summary>
+                {%- form 'customer_address', address -%}
+                  {%- render 'address-fields', form: form, address: address, id: address.id -%}
+                  <button class="btn" type="submit">{{ 'customer.addresses.update' | t }}</button>
+                {%- endform -%}
+              </details>
+              <form method="post" action="{{ address.url }}" onsubmit="return confirm({{ 'customer.addresses.delete_confirm' | t | json | escape }});">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="cart-item__remove">{{ 'customer.addresses.delete' | t }}</button>
+              </form>
+            </div>
+          {%- endfor -%}
+          {%- render 'pagination', paginate: paginate -%}
+        {%- endpaginate -%}
+      </div>
+      <div>
+        <h2 class="label" style="margin-bottom:16px">{{ 'customer.addresses.add_new' | t }}</h2>
+        {%- form 'customer_address', customer.new_address -%}
+          {%- render 'address-fields', form: form, address: customer.new_address, id: 'new' -%}
+          <button class="btn" type="submit">{{ 'customer.addresses.add' | t }}</button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{ "name": "Customer addresses", "settings": [] }
+{% endschema %}

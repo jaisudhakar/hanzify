@@ -1,0 +1,69 @@
+{%- liquid
+  assign body_font = settings.type_body_font
+  assign body_500 = body_font | font_modify: 'weight', '500'
+  assign body_600 = body_font | font_modify: 'weight', '600'
+  assign body_700 = body_font | font_modify: 'weight', 'bolder'
+  assign body_800 = body_font | font_modify: 'weight', '800'
+  assign heading_font = settings.type_heading_font
+-%}
+<style>
+  {{ body_font | font_face: font_display: 'swap' }}
+  {{ body_500 | font_face: font_display: 'swap' }}
+  {{ body_600 | font_face: font_display: 'swap' }}
+  {{ body_700 | font_face: font_display: 'swap' }}
+  {{ body_800 | font_face: font_display: 'swap' }}
+  {{ heading_font | font_face: font_display: 'swap' }}
+
+  :root {
+    --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-mono: {{ body_font.family }}, {{ body_font.fallback_families }};
+    --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+    --font-heading-weight: {{ heading_font.weight }};
+
+    --gutter: clamp(16px, 2.6vw, 41px);
+    --max: {{ settings.page_width | default: 1920 }}px;
+    --header-h: 46px;
+    --announce-h: 0px;
+    --radius: {{ settings.button_radius | default: 2 }}px;
+    --card-radius: {{ settings.card_radius | default: 0 }}px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --dark: #0b0b0b;
+    --dark-2: #151515;
+    --on-dark: #ffffff;
+    --on-dark-muted: #a3a3a3;
+    --line-dark: rgba(255, 255, 255, 0.16);
+    --dark-card: #ececec;
+  }
+
+  {% for scheme in settings.color_schemes -%}
+    {%- liquid
+      assign s = scheme.settings
+      assign selector = '.color-' | append: scheme.id
+      if forloop.first
+        assign selector = ':root, ' | append: selector
+      endif
+    -%}
+    {{ selector }} {
+      --bg: {{ s.background }};
+      --bg-alt: {{ s.background_alt }};
+      --stage: {{ s.background_alt }};
+      --card: {{ s.card }};
+      --ink: {{ s.text }};
+      --ink-soft: {{ s.text | color_mix: s.background, 85 }};
+      --muted: {{ s.text | color_mix: s.background, 52 }};
+      --line: {{ s.text | color_modify: 'alpha', 0.1 }};
+      --accent: {{ s.accent }};
+      --btn-bg: {{ s.button }};
+      --btn-fg: {{ s.button_label }};
+    }
+  {% endfor %}
+
+  {% for scheme in settings.color_schemes -%}
+    .color-{{ scheme.id }} { background-color: var(--bg); color: var(--ink); }
+  {% endfor %}
+
+  body { font-family: var(--font-body); }
+  .display, .tryon__title, .product__title, .h1, .h2, .h3 { font-family: var(--font-heading); }
+  .card__media { border-radius: var(--card-radius); }
+</style>

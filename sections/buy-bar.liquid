@@ -1,0 +1,50 @@
+{%- liquid
+  assign p = section.settings.product
+  assign show = true
+  if p == blank or p.available == false
+    assign show = false
+  endif
+  if template.name == 'product' or template.name == 'cart'
+    assign show = false
+  endif
+  if section.settings.home_only and template.name != 'index'
+    assign show = false
+  endif
+  assign v = p.selected_or_first_available_variant
+-%}
+{%- if show -%}
+  <div class="buybar" data-buybar>
+    <a class="buybar__img" href="{{ p.url }}" tabindex="-1">
+      {%- if p.featured_media -%}
+        {{ p.featured_media | image_url: width: 120 | image_tag: alt: '', width: 44, height: 44, loading: 'lazy' }}
+      {%- endif -%}
+    </a>
+    <div class="buybar__info">
+      <a href="{{ p.url }}">{{ p.title | escape }}</a>
+      <small>{{ section.settings.subtitle | default: p.type | escape }}</small>
+    </div>
+    <span class="buybar__price">{{ v.price | money }}</span>
+    {%- if p.has_only_default_variant or section.settings.direct_add -%}
+      <button class="buybar__btn" type="button" data-quick-add="{{ v.id }}">{% render 'icon', icon: 'bag' %}{{ 'products.product.add_to_cart' | t }}</button>
+    {%- else -%}
+      <a class="buybar__btn" href="{{ p.url }}">{% render 'icon', icon: 'bag' %}{{ 'products.product.choose_options' | t }}</a>
+    {%- endif -%}
+  </div>
+{%- elsif request.design_mode and p == blank -%}
+  <div class="buybar buybar--editor"><p class="buybar__info"><small>{{ 'sections.buy_bar.empty' | t }}</small></p></div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Floating buy bar",
+  "class": "section-buybar",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Products", "info": "Leave empty to show the product type." },
+    { "type": "checkbox", "id": "direct_add", "label": "Add first available variant directly", "default": true, "info": "When off, products with options link to the product page." },
+    { "type": "checkbox", "id": "home_only", "label": "Show on home page only", "default": false }
+  ],
+  "presets": [{ "name": "Floating buy bar" }]
+}
+{% endschema %}

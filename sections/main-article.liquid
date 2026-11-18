@@ -1,0 +1,55 @@
+<article class="article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="page-hero">
+    <div class="container">
+      <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><a href="{{ blog.url }}">{{ blog.title | escape }}</a><span aria-hidden="true">/</span><span>{{ article.title | escape }}</span></nav>
+      <p class="label label--muted">{{ article.published_at | time_tag: format: 'date' }}{% if section.settings.show_author %} — {{ article.author }}{% endif %}</p>
+      <h1 class="display h2" style="margin-top:14px" itemprop="headline">{{ article.title | escape }}</h1>
+    </div>
+  </header>
+  {%- if article.image -%}
+    <div class="container article__image">
+      {{ article.image | image_url: width: 1920 | image_tag: alt: article.image.alt, sizes: '100vw', widths: '750, 1100, 1500, 1920', loading: 'eager' }}
+    </div>
+  {%- endif -%}
+  <div class="section">
+    <div class="container"><div class="rte article__content" itemprop="articleBody">{{ article.content }}</div></div>
+  </div>
+
+  {%- if blog.comments_enabled? -%}
+    <section class="section section--tight-top">
+      <div class="container article__comments">
+        {%- if article.comments_count > 0 -%}
+          <h2 class="display h3">{{ 'templates.article.comments' | t: count: article.comments_count }}</h2>
+          {%- paginate article.comments by 20 -%}
+            {%- for comment in article.comments -%}
+              <div class="address-card"><div class="rte">{{ comment.content }}</div><small class="label label--muted">{{ comment.author }} — {{ comment.created_at | time_tag: format: 'date' }}</small></div>
+            {%- endfor -%}
+            {%- render 'pagination', paginate: paginate -%}
+          {%- endpaginate -%}
+        {%- endif -%}
+        {%- form 'new_comment', article, class: 'account-form' -%}
+          <h2 class="display h3">{{ 'templates.article.comment_form_title' | t }}</h2>
+          {%- if form.errors -%}<div class="errors" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          {%- if form.posted_successfully? -%}
+            <p class="form-message" role="status">{% if blog.moderated? %}{{ 'templates.article.success_moderated' | t }}{% else %}{{ 'templates.article.success' | t }}{% endif %}</p>
+          {%- endif -%}
+          <label for="CommentAuthor">{{ 'templates.article.name' | t }}</label>
+          <input class="field" id="CommentAuthor" type="text" name="comment[author]" value="{{ form.author }}" required autocomplete="name">
+          <label for="CommentEmail">{{ 'templates.article.email' | t }}</label>
+          <input class="field" id="CommentEmail" type="email" name="comment[email]" value="{{ form.email }}" required autocomplete="email">
+          <label for="CommentBody">{{ 'templates.article.message' | t }}</label>
+          <textarea class="field" id="CommentBody" name="comment[body]" rows="5" required>{{ form.body }}</textarea>
+          {%- if blog.moderated? -%}<p class="cart-note">{{ 'templates.article.moderated' | t }}</p>{%- endif -%}
+          <button type="submit" class="btn">{{ 'templates.article.post' | t }}</button>
+        {%- endform -%}
+      </div>
+    </section>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "settings": [{ "type": "checkbox", "id": "show_author", "label": "Show author", "default": true }]
+}
+{% endschema %}

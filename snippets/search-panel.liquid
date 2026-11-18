@@ -1,0 +1,23 @@
+<div class="search-panel" id="search-panel" aria-hidden="true" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.search' | t }}">
+  <div class="container">
+    <form class="search-panel__bar" action="{{ routes.search_url }}" method="get" role="search">
+      {%- render 'icon', icon: 'search' -%}
+      <label class="visually-hidden" for="SearchPanelInput">{{ 'templates.search.placeholder' | t: shop: shop.name }}</label>
+      <input class="search-panel__input" id="SearchPanelInput" type="search" name="q" placeholder="{{ 'templates.search.placeholder' | t: shop: shop.name | escape }}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-search-input{% if settings.predictive_search_enabled %} data-predictive{% endif %} aria-controls="SearchPanelResults">
+      <input type="hidden" name="options[prefix]" value="last">
+      <button class="drawer__close" type="button" data-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', icon: 'close' %}</button>
+    </form>
+    <div class="search-panel__results" id="SearchPanelResults" data-search-results aria-live="polite">
+      {%- assign chips = settings.search_suggestions | split: ',' -%}
+      {%- if chips.size > 0 -%}
+        <div class="search-panel__hint" data-search-hint>
+          <span class="label label--muted">{{ 'templates.search.popular' | t }}</span>
+          {%- for chip in chips -%}
+            {%- assign c = chip | strip -%}
+            <a class="chip" href="{{ routes.search_url }}?q={{ c | url_encode }}" data-suggest="{{ c | escape }}">{{ c | escape }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

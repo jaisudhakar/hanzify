@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_schemes['scheme-1'].settings.background }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    {%- unless settings.type_body_font.system? -%}
+      {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
+    {%- endunless -%}
+
+    {% render 'css-variables' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      window.theme = {
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          cartAdd: {{ routes.cart_add_url | append: '.js' | json }},
+          cartChange: {{ routes.cart_change_url | append: '.js' | json }},
+          cartUpdate: {{ routes.cart_update_url | append: '.js' | json }},
+          predictiveSearch: {{ routes.predictive_search_url | json }},
+          search: {{ routes.search_url | json }}
+        },
+        cartType: {{ settings.cart_type | json }},
+        freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 | json }},
+        moneyFormat: {{ shop.money_format | json }},
+        strings: {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }},
+          selectSize: {{ 'products.product.select_option' | t | json }},
+          added: {{ 'products.product.added' | t | json }},
+          cartError: {{ 'sections.cart.cart_error' | t | json }},
+          shippingAway: {{ 'sections.cart.shipping_away_html' | t | json }},
+          shippingFree: {{ 'sections.cart.shipping_free_html' | t | json }},
+          results: {{ 'templates.search.results_with_count_js' | t | json }}
+        }
+      };
+      document.documentElement.classList.remove('no-js');
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name | handle }}--{{ template.suffix | handle }}{% endif %}{% if template.name == 'index' %} is-home{% endif %}">
+    <a class="skip-link" href="#main">{{ 'accessibility.skip_to_text' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    <div class="overlay" data-overlay></div>
+    {%- render 'cart-drawer' -%}
+    {%- render 'search-panel' -%}
+    <div class="lightbox" data-lightbox aria-hidden="true">
+      <button class="drawer__close lightbox__close" type="button" data-modal-close aria-label="{{ 'accessibility.close' | t }}">
+        {%- render 'icon', icon: 'close' -%}
+      </button>
+      <img src="data:," alt="" width="1000" height="1250">
+    </div>
+
+    <div class="visually-hidden" aria-live="polite" role="status" data-live-region></div>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+{
+  "sections": {
+    "tryon_tops": {
+      "type": "try-on",
+      "blocks": {
+        "t1": { "type": "garment", "settings": { "product": "no-direction-tee-gradient", "label": "Core Essentials" } },
+        "t2": { "type": "garment", "settings": { "product": "offgrid-shell-jacket", "label": "Field System - 001" } },
+        "t3": { "type": "garment", "settings": { "product": "field-shell-001-technical-oversized-jacket", "label": "Field System - 001" } },
+        "t4": { "type": "garment", "settings": { "product": "essential-oversized-hoodie", "label": "Core Essentials" } },
+        "t5": { "type": "garment", "settings": { "product": "no-direction-oversized-heavyweight-tee", "label": "Graphic Series 2026" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4", "t5"],
+      "settings": {
+        "heading": "Try on tops",
+        "model_alt": "Model wearing the Core Heavy Tee",
+        "button_label": "Shop Now",
+        "hint": "Drag to explore",
+        "color_scheme": "scheme-1",
+        "demo_set": "tops"
+      }
+    },
+    "featured": {
+      "type": "product-slider",
+      "settings": {
+        "heading": "Featured",
+        "products": [
+          "blank-oversized-heavyweight-tee",
+          "core-heavy-tee",
+          "essential-oversized-hoodie",
+          "essential-womens-structure-jacket",
+          "field-shell-001-technical-oversized-jacket",
+          "no-direction-oversized-heavyweight-tee",
+          "no-direction-tee-gradient",
+          "offgrid-shell-jacket",
+          "waffle-fleece-quarter-zip-sweatshirt"
+        ],
+        "limit": 12,
+        "view_all_label": "View all",
+        "view_all_url": "shopify://collections/tops",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "tryon_bottoms": {
+      "type": "try-on",
+      "blocks": {
+        "b1": { "type": "garment", "settings": { "product": "terrain-wash", "label": "Core Essentials" } },
+        "b2": { "type": "garment", "settings": { "product": "wide-leg-washed-black-denim-jeans", "label": "Core Essentials" } },
+        "b3": { "type": "garment", "settings": { "product": "raw-denim-washed", "label": "Core Essentials" } },
+        "b4": { "type": "garment", "settings": { "product": "north-topographic-sweatpant", "label": "Graphic Series 2026" } },
+        "b5": { "type": "garment", "settings": { "product": "wide-leg-washed-black-denim-jeans", "label": "Everyday Uniform." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5"],
+      "settings": {
+        "heading": "Try on bottoms",
+        "model_alt": "Model wearing black denim",
+        "button_label": "Shop Now",
+        "hint": "Drag to explore",
+        "color_scheme": "scheme-1",
+        "demo_set": "bottoms"
+      }
+    },
+    "shop_bottoms": {
+      "type": "product-slider",
+      "settings": {
+        "heading": "Shop bottoms",
+        "products": [
+          "north-topographic-sweatpant",
+          "raw-denim-washed",
+          "technical-field-cargo",
+          "terrain-wash",
+          "wide-leg-washed-black-denim-jeans"
+        ],
+        "limit": 12,
+        "view_all_label": "View all",
+        "view_all_url": "shopify://collections/bottoms",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "reveal": {
+      "type": "zip-reveal",
+      "settings": {
+        "brand_line_1": "NØRTH",
+        "brand_line_2": "CLOTHING",
+        "about_heading": "about us",
+        "about_text": "No fixed direction. Just your own."
+      }
+    },
+    "social": {
+      "type": "instagram-marquee",
+      "blocks": {
+        "i1": { "type": "tile", "settings": { "caption": "Cold air" } },
+        "i2": { "type": "tile", "settings": { "caption": "Heavyweight" } },
+        "i3": { "type": "tile", "settings": { "caption": "Instagram" } },
+        "i4": { "type": "tile", "settings": { "caption": "No Direction" } },
+        "i5": { "type": "tile", "settings": { "caption": "01:17 AM" } },
+        "i6": { "type": "tile", "settings": { "caption": "Somewhere north" } },
+        "i7": { "type": "tile", "settings": { "caption": "People move differently" } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6", "i7"],
+      "settings": {
+        "heading": "@HANZIFE",
+        "subheading": "Follow the latest looks, moments and stories.",
+        "button_label": "Follow us",
+        "speed": 60,
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["tryon_tops", "featured", "tryon_bottoms", "shop_bottoms", "reveal", "social"]
+}

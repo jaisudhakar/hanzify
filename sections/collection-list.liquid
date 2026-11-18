@@ -1,0 +1,39 @@
+<section class="section color-{{ section.settings.color_scheme }}">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <div class="section-head"><h2 class="display h3">{{ section.settings.heading | escape }}</h2></div>
+    {%- endif -%}
+    <div class="grid collection-tiles" style="--cols: {{ section.settings.columns }}">
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        <a class="collection-tile" href="{{ c.url | default: routes.collections_url }}" data-reveal style="--d:{{ forloop.index0 | modulo: 4 | times: 0.06 }}s" {{ block.shopify_attributes }}>
+          <div class="collection-tile__media">
+            {%- assign img = block.settings.image | default: c.featured_image -%}
+            {%- render 'media-image', image: img, alt: c.title, sizes: '(min-width: 990px) 33vw, 50vw', fallback: 'collection-1' -%}
+          </div>
+          <span class="collection-tile__title label">{{ c.title | default: 'Collection' | escape }} {% render 'icon', icon: 'arrow' %}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "tag": "div",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Collections" },
+    { "type": "range", "id": "columns", "label": "Columns on desktop", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    { "type": "collection", "name": "Collection", "settings": [
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "image_picker", "id": "image", "label": "Image", "info": "Defaults to the collection image." }
+    ] }
+  ],
+  "presets": [{ "name": "Collection list", "blocks": [{ "type": "collection" }, { "type": "collection" }, { "type": "collection" }] }]
+}
+{% endschema %}

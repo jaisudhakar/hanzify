@@ -1,0 +1,37 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div>
+      <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><span>{{ 'templates.collections.title' | t }}</span></nav>
+      {%- assign fallback_heading = 'templates.collections.title' | t -%}
+      <h1 class="display h1">{{ section.settings.heading | default: fallback_heading | escape }}</h1>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    {%- paginate collections by 24 -%}
+      <div class="grid collection-tiles" style="--cols: {{ section.settings.columns }}">
+        {%- for c in collections -%}
+          <a class="collection-tile" href="{{ c.url }}" data-reveal style="--d:{{ forloop.index0 | modulo: 4 | times: 0.06 }}s">
+            <div class="collection-tile__media">
+              {%- assign img = c.featured_image -%}
+              {%- render 'media-image', image: img, alt: c.title, sizes: '(min-width: 990px) 33vw, 50vw', fallback: 'collection-1' -%}
+            </div>
+            <span class="collection-tile__title label">{{ c.title | escape }} <small>{{ c.all_products_count }}</small></span>
+          </a>
+        {%- endfor -%}
+      </div>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list page",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "range", "id": "columns", "label": "Columns on desktop", "min": 2, "max": 4, "step": 1, "default": 3 }
+  ]
+}
+{% endschema %}

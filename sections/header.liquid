@@ -1,0 +1,122 @@
+{%- liquid
+  assign menu = linklists[section.settings.menu]
+-%}
+<header class="nav{% if section.settings.logo != blank %} nav--custom-logo{% endif %}" data-nav>
+  <div class="nav__inner">
+    <div class="nav__left">
+      <button class="nav__btn" type="button" data-dropdown-toggle aria-expanded="false" aria-haspopup="true" aria-controls="HeaderDropdown-{{ section.id }}">
+        {{- section.settings.menu_label | default: menu.title | escape }}
+        {% render 'icon', icon: 'chev' -%}
+      </button>
+      <nav class="dropdown" id="HeaderDropdown-{{ section.id }}" data-dropdown aria-label="{{ 'sections.header.menu' | t }}">
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>
+            {{- link.title | escape -}}
+            {%- if section.settings.show_numbers and forloop.index <= section.settings.numbered_count %} <small>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</small>{% elsif link.links != blank %} <small>{{ link.links.size }}</small>{% endif -%}
+          </a>
+          {%- for child in link.links -%}
+            <a class="dropdown__child" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ routes.all_products_collection_url }}">{{ 'sections.header.shop_all' | t }}</a>
+        {%- endfor -%}
+
+        {%- assign secondary = linklists[section.settings.secondary_menu] -%}
+        {%- if secondary.links.size > 0 -%}
+          <hr>
+          {%- for link in secondary.links -%}
+            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- endfor -%}
+        {%- endif -%}
+        <hr>
+        <a href="{{ routes.search_url }}" data-open="search-panel">{{ 'sections.header.search' | t }}</a>
+      </nav>
+    </div>
+
+    <a class="nav__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}" style="--logo-w: {{ section.settings.logo_width }}px">
+      {%- if section.settings.logo != blank -%}
+        {{ section.settings.logo | image_url: width: 300 | image_tag: class: 'nav__logo-img nav__logo-img--default', alt: shop.name, widths: '80, 160, 240, 300', sizes: '120px', loading: 'eager' }}
+        {%- if section.settings.logo_inverse != blank -%}
+          {{ section.settings.logo_inverse | image_url: width: 300 | image_tag: class: 'nav__logo-img nav__logo-img--inverse', alt: shop.name, widths: '80, 160, 240, 300', sizes: '120px', loading: 'eager' }}
+        {%- endif -%}
+      {%- elsif settings.demo_content -%}
+        <img src="{{ 'demo-logo-white.svg' | asset_url }}" alt="" width="34" height="34">
+      {%- else -%}
+        <span class="nav__logo-text">{{ shop.name | escape }}</span>
+      {%- endif -%}
+    </a>
+
+    <div class="nav__right">
+      {%- if section.settings.show_search -%}
+        <a class="nav__btn" href="{{ routes.search_url }}" data-open="search-panel" aria-label="{{ 'sections.header.search' | t }}">
+          {%- render 'icon', icon: 'search' -%}
+        </a>
+      {%- endif -%}
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="nav__btn" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="{% if customer %}{{ 'customer.account_fallback' | t }}{% else %}{{ 'customer.log_in' | t }}{% endif %}">
+          {%- render 'icon', icon: 'user' -%}
+        </a>
+      {%- endif -%}
+      <a class="nav__btn nav__count" href="{{ routes.cart_url }}"{% if settings.cart_type == 'drawer' and template.name != 'cart' %} data-open="cart-drawer"{% endif %} aria-label="{{ 'sections.header.cart' | t }}">
+        {%- render 'icon', icon: 'bag' -%}
+        <span data-cart-badge{% if cart.item_count == 0 %} hidden{% endif %}><b data-cart-count>{{ cart.item_count }}</b></span>
+        <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{%- if request.page_type == 'index' -%}
+  {%- assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      {% if section.settings.logo %}
+        "logo": {{ section.settings.logo | image_url: width: 500 | prepend: 'https:' | json }},
+      {% endif %}
+      "sameAs": [
+        {{ settings.social_twitter_link | json }},
+        {{ settings.social_facebook_link | json }},
+        {{ settings.social_pinterest_link | json }},
+        {{ settings.social_instagram_link | json }},
+        {{ settings.social_tiktok_link | json }},
+        {{ settings.social_youtube_link | json }}
+      ],
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "image_picker", "id": "logo_inverse", "label": "Logo on dark sections", "info": "Shown when the header sits over a dark section (e.g. the zip reveal or collection banner)." },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 24, "max": 200, "step": 2, "unit": "px", "default": 34 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "menu_label", "label": "Menu button label", "default": "Collections" },
+    { "type": "checkbox", "id": "show_numbers", "label": "Number the first menu items", "default": true },
+    { "type": "range", "id": "numbered_count", "label": "Numbered items", "min": 0, "max": 6, "step": 1, "default": 2 },
+    { "type": "link_list", "id": "secondary_menu", "label": "Secondary menu", "info": "Shown below a divider, e.g. Lookbook and About us." },
+    { "type": "checkbox", "id": "show_search", "label": "Show search icon", "default": false }
+  ]
+}
+{% endschema %}

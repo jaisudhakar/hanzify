@@ -1,0 +1,70 @@
+{%- liquid
+  assign left = section.settings.image_left
+  assign right = section.settings.image_right
+  if left != blank
+    assign left_url = left | image_url: width: 1600
+  elsif settings.demo_content
+    assign left_url = 'demo-reveal-left.webp' | asset_url
+  endif
+  if right != blank
+    assign right_url = right | image_url: width: 1600
+  elsif settings.demo_content
+    assign right_url = 'demo-reveal-right.webp' | asset_url
+  endif
+-%}
+<section class="reveal" data-zip-reveal data-nav-dark aria-label="{{ section.settings.about_heading | default: shop.name | escape }}">
+  <div class="reveal__sticky">
+    <div class="reveal__video">
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: muted: true, loop: true, playsinline: true, preload: 'metadata', image_size: '1920x' }}
+      {%- elsif section.settings.poster != blank -%}
+        {{ section.settings.poster | image_url: width: 1920 | image_tag: loading: 'lazy', sizes: '100vw', widths: '750, 1100, 1500, 1920', alt: '' }}
+      {%- elsif settings.demo_content -%}
+        <video muted loop playsinline preload="metadata" poster="{{ 'demo-reveal-poster.jpg' | asset_url }}">
+          <source src="{{ 'demo-reveal.mp4' | asset_url }}" type="video/mp4">
+        </video>
+      {%- else -%}
+        {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+    <div class="reveal__brand" aria-hidden="true">
+      <div>
+        <b>{{ section.settings.brand_line_1 | default: shop.name | escape }}</b>
+        {%- if section.settings.brand_line_2 != blank -%}<span>{{ section.settings.brand_line_2 | escape }}</span>{%- endif -%}
+      </div>
+    </div>
+    <div class="reveal__half reveal__half--left"{% if left_url %} style="background-image:url({{ left_url }})"{% endif %}></div>
+    <div class="reveal__half reveal__half--right"{% if right_url %} style="background-image:url({{ right_url }})"{% endif %}></div>
+    <div class="reveal__about">
+      <div>
+        {%- if section.settings.about_heading != blank -%}<small>{{ section.settings.about_heading | escape }}</small>{%- endif -%}
+        {%- if section.settings.about_text != blank -%}<p>{{ section.settings.about_text | escape }}</p>{%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a class="btn btn--light reveal__btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} {% render 'icon', icon: 'arrow' %}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Zip reveal",
+  "tag": "div",
+  "class": "section-reveal",
+  "settings": [
+    { "type": "paragraph", "content": "Two halves split open on scroll to reveal a looping video, then your brand statement fades in." },
+    { "type": "image_picker", "id": "image_left", "label": "Left half image" },
+    { "type": "image_picker", "id": "image_right", "label": "Right half image" },
+    { "type": "video", "id": "video", "label": "Background video" },
+    { "type": "image_picker", "id": "poster", "label": "Background image", "info": "Used when no video is selected." },
+    { "type": "text", "id": "brand_line_1", "label": "Brand line 1", "default": "NØRTH", "info": "Defaults to the store name." },
+    { "type": "text", "id": "brand_line_2", "label": "Brand line 2", "default": "CLOTHING" },
+    { "type": "text", "id": "about_heading", "label": "Statement label", "default": "about us" },
+    { "type": "text", "id": "about_text", "label": "Statement", "default": "No fixed direction. Just your own." },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Zip reveal" }]
+}
+{% endschema %}

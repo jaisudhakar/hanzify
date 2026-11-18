@@ -1,0 +1,29 @@
+<section class="page-hero color-{{ section.settings.color_scheme }}">
+  <div class="container page-hero__inner">
+    <div>
+      {%- if section.settings.show_breadcrumbs -%}
+        <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}">
+          <a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><span>{{ page.title | default: section.settings.heading | escape }}</span>
+        </nav>
+      {%- endif -%}
+      {%- if section.settings.eyebrow != blank -%}<span class="label label--muted">{{ section.settings.eyebrow | escape }}</span>{%- endif -%}
+      <h1 class="display h1"{% if section.settings.eyebrow != blank %} style="margin-top:14px"{% endif %}>{{ section.settings.heading | default: page.title | escape | newline_to_br }}</h1>
+    </div>
+    {%- if section.settings.text != blank -%}<div class="lead">{{ section.settings.text }}</div>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page heading",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumbs", "label": "Show breadcrumbs", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "info": "Defaults to the page title." },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Page heading" }]
+}
+{% endschema %}

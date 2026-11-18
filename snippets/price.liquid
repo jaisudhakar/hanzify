@@ -1,0 +1,38 @@
+{%- comment -%}
+  Accepts:
+  - product {Object}
+  - variant {Object} optional, defaults to selected_or_first_available_variant
+  - show_from {Boolean} prefix "From" when prices vary
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign price = target.price
+  assign compare = target.compare_at_price
+  if variant == blank and product.price_varies and show_from
+    assign price = product.price_min
+    assign compare = nil
+  endif
+-%}
+<span class="price{% if compare > price %} price--sale{% endif %}{% if target.available == false %} price--soldout{% endif %}" data-price>
+  {%- if compare > price -%}
+    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+    <s>{{ compare | money }}</s>
+    <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+  {%- endif -%}
+  <span class="price__current">
+    {%- if variant == blank and product.price_varies and show_from -%}
+      {%- assign price_money = price | money -%}
+      {{ 'products.product.price.from_price_html' | t: price: price_money }}
+    {%- else -%}
+      {{ price | money }}
+    {%- endif -%}
+  </span>
+  {%- if target.unit_price_measurement -%}
+    <small class="price__unit">
+      <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+      {{ target.unit_price | money }}<span aria-hidden="true">/</span><span class="visually-hidden">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+      {%- if target.unit_price_measurement.reference_value != 1 -%}{{ target.unit_price_measurement.reference_value }}{%- endif -%}
+      {{ target.unit_price_measurement.reference_unit }}
+    </small>
+  {%- endif -%}
+</span>

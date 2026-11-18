@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "heading": {
+      "type": "page-heading",
+      "settings": {
+        "show_breadcrumbs": true,
+        "heading": "Built for\nthe unknown.",
+        "text": "<p>NØRTH started with a compass and a simple idea: make fewer, heavier, better things — for people who move differently.</p>",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "blocks": {
+        "e": { "type": "eyebrow", "settings": { "text": "Est. 2024" } },
+        "h1": { "type": "heading", "settings": { "heading": "Heavyweight by default" } },
+        "t1": { "type": "text", "settings": { "text": "<p>Every Core Essential starts with dense, long-staple cotton — 320 GSM for our tees and up to 480 GSM for fleece. Garments are dyed and washed after they’re sewn, so they arrive soft and keep their shape for years.</p>" } },
+        "h2": { "type": "heading", "settings": { "heading": "Graphics with a direction" } },
+        "t2": { "type": "text", "settings": { "text": "<p>The Graphic Series is our seasonal canvas: compasses, contour lines and coordinates drawn from the places we go. Each series is produced once, in a limited run.</p>" } },
+        "h3": { "type": "heading", "settings": { "heading": "Shipping & returns", "anchor": "shipping" } },
+        "t3": { "type": "text", "settings": { "text": "<p>Orders ship within 1–2 business days. Standard shipping is free on orders over $150. Returns and exchanges are free within 30 days for unworn items with tags attached.</p>" } }
+      },
+      "block_order": ["e", "h1", "t1", "h2", "t2", "h3", "t3"],
+      "settings": { "image_alt": "Hiker on a snowy ridge", "image_position": "left", "color_scheme": "scheme-1" }
+    },
+    "banner": {
+      "type": "image-banner",
+      "settings": { "parallax": true, "heading": "Somewhere\nnorth.", "button_label": "Shop all" }
+    }
+  },
+  "order": ["heading", "story", "banner"]
+}

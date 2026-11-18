@@ -1,0 +1,12 @@
+<div class="container section-custom-liquid">{{ section.settings.custom_liquid }}</div>
+
+{% schema %}
+{
+  "name": "Custom Liquid",
+  "tag": "section",
+  "settings": [
+    { "type": "liquid", "id": "custom_liquid", "label": "Liquid", "info": "Add app snippets or other Liquid code to create advanced customizations." }
+  ],
+  "presets": [{ "name": "Custom Liquid" }]
+}
+{% endschema %}

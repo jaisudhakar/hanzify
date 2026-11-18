@@ -1,0 +1,36 @@
+{%- comment -%}
+  Renders a responsive image from an image setting, falling back to bundled demo
+  media (when "Use bundled demo imagery" is on) or a Shopify placeholder.
+
+  Accepts:
+  - image {Object} image setting / media image (optional)
+  - demo {String} demo asset filename, e.g. 'demo-ig-1.webp' (optional)
+  - fallback {String} placeholder_svg_tag name (default 'image')
+  - alt {String}
+  - class {String}
+  - sizes {String}
+  - widths {String}
+  - lazy {Boolean} default true
+  - width / height {Number} intrinsic size for demo images
+{%- endcomment -%}
+{%- liquid
+  assign img_sizes = sizes | default: '100vw'
+  assign img_widths = widths | default: '360, 540, 720, 900, 1100, 1400, 1800'
+  assign img_alt = alt | default: image.alt | escape
+  assign loading = 'lazy'
+  if lazy == false
+    assign loading = 'eager'
+  endif
+-%}
+{%- if image != blank -%}
+  {%- if lazy == false -%}
+    {{ image | image_url: width: 1800 | image_tag: class: class, sizes: img_sizes, widths: img_widths, alt: img_alt, fetchpriority: 'high', loading: 'eager', draggable: 'false' }}
+  {%- else -%}
+    {{ image | image_url: width: 1800 | image_tag: class: class, sizes: img_sizes, widths: img_widths, alt: img_alt, loading: 'lazy', draggable: 'false' }}
+  {%- endif -%}
+{%- elsif demo != blank and settings.demo_content -%}
+  <img class="{{ class }}" src="{{ demo | asset_url }}" alt="{{ img_alt }}" width="{{ width | default: 1000 }}" height="{{ height | default: 1250 }}" loading="{{ loading }}" draggable="false"{% if lazy == false %} fetchpriority="high"{% endif %}>
+{%- else -%}
+  {%- assign ph_class = class | append: ' placeholder' -%}
+  {{ fallback | default: 'image' | placeholder_svg_tag: ph_class }}
+{%- endif -%}

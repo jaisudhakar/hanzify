@@ -1,0 +1,6 @@
+{%- if settings.free_shipping_threshold > 0 -%}
+  <div class="ship-meter" data-ship-meter data-total="{{ cart.total_price }}">
+    <p data-ship-text>{{ 'sections.cart.shipping_note' | t }}</p>
+    <div class="ship-meter__bar"><span data-ship-bar></span></div>
+  </div>
+{%- endif -%}

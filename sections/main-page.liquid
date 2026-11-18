@@ -1,0 +1,17 @@
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div>
+      <nav class="breadcrumbs label" aria-label="{{ 'general.breadcrumbs' | t }}"><a href="{{ routes.root_url }}">{{ 'general.home' | t }}</a><span aria-hidden="true">/</span><span>{{ page.title | escape }}</span></nav>
+      <h1 class="display h1">{{ page.title | escape }}</h1>
+    </div>
+  </div>
+</section>
+{%- if page.content != blank -%}
+  <section class="section">
+    <div class="container"><div class="rte">{{ page.content }}</div></div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{ "name": "Page", "tag": "div", "settings": [] }
+{% endschema %}
